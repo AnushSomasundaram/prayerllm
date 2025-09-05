@@ -1,0 +1,84 @@
+/* ----- Global reset / layout ----- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+:root { color-scheme: light dark; }
+
+body {
+  /* dark background like your screenshot */
+  background: #040404;
+  color: #eaeaea;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+/* Keep content under a centered column when desired */
+.container {
+  width: min(1100px, 92%);
+  margin-inline: auto;
+}
+
+/* Full-width top bar with centered items */
+.topbar {
+  width: 100%;
+  border-bottom: 1px solid #2b2b2b;
+  background: #151515;
+}
+
+.topbar-inner {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;   /* center items horizontally */
+  gap: 20px;
+}
+
+/* Simple link styling */
+.navlink {
+  color: #a9b0b5;
+  text-decoration: none;
+  font-weight: 500;
+}
+.navlink:hover { color: #ffffff; }
+
+/* Full-viewport center helper (minus the topbar height) */
+.full-center {
+  min-height: calc(100vh - 56px);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+/* Card-ish image style */
+.hero-img {
+  width: min(720px, 95vw);   /* responsive max width */
+  height: auto;
+  display: block;
+  margin-inline: auto;       /* horizontally center the image */
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+}
+
+/* Headings/text */
+.h1 {
+  margin: 16px 0 8px;
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 700;
+}
+.muted {
+  color: #9aa0a6;
+}
+
+.hero-headline {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 6px rgba(255,255,255,0.5),
+               0 0 20px rgba(180,200,255,0.3);
+}
