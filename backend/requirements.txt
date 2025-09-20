@@ -1,20 +1,20 @@
-# requirements.txt
+# LangChain (aligned versions)
+langchain
+langchain-core
+langchain-community
+langchain-openai
+langchain-ollama
 
-# Core LangChain packages
-langchain==0.2.16
-langchain-core==0.2.40
-langchain-community==0.2.16
-langchain-ollama==0.1.1
+# Clients (optional outside LangChain)
+openai
+ollama
 
-# Ollama client (direct API support)
-ollama>=0.3.0
+# Backend
+fastapi
+uvicorn[standard]==0.30.6
+PyYAML
+python-dotenv
 
-# Data validation (LangChain now uses Pydantic v2)
+# Optional UI
+
 pydantic>=2.7
-
-# Optional: for interactive app / API work later
-fastapi>=0.111.0
-uvicorn[standard]>=0.30.0
-streamlit>=1.38.0
-PyYAML==6.0.2
-python-dotenv==1.0.1
