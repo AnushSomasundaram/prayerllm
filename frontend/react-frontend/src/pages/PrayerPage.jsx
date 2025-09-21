@@ -74,11 +74,19 @@ import { useRef, useState, useEffect } from "react";
 // VITE_PRAYER_STREAM_URL=http://localhost:8000/pray
 // VITE_PRAYER_TEXT_URL=http://localhost:8000/pray_text   # optional fallback
 // VITE_PRAYER_API_KEY=dev-secret-key
-const STREAM_URL =
-  (import.meta.env.VITE_PRAYER_STREAM_URL || "http://localhost:8000/pray").trim();
-const TEXT_URL =
-  (import.meta.env.VITE_PRAYER_TEXT_URL || "http://localhost:8000/pray_text").trim();
-const API_KEY = (import.meta.env.VITE_PRAYER_API_KEY || "").trim();
+
+// when working with local ollama and fast api
+// const STREAM_URL =
+//   (import.meta.env.VITE_PRAYER_STREAM_URL || "http://localhost:8000/pray").trim();
+// const TEXT_URL =
+//   (import.meta.env.VITE_PRAYER_TEXT_URL || "http://localhost:8000/pray_text").trim();
+// const API_KEY = (import.meta.env.VITE_PRAYER_API_KEY || "").trim();
+
+
+//when workign with fast api running on a docker contatiner on google cloud run
+
+const STREAM_URL = "/api/pray";
+const TEXT_URL   = "/api/pray_text";
 
 export default function PrayerPage() {
   const [text, setText] = useState("");
@@ -115,15 +123,22 @@ export default function PrayerPage() {
       // 1) try the streaming endpoint (plain text chunks)
       const res = await fetch(STREAM_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": API_KEY,
-          Accept: "text/plain",
-        },
-        body: JSON.stringify({ prayer: prompt }),
-        signal: controller.signal,
-      });
-
+      //with old local ollama and fast api
+        //   headers: {
+      //     "Content-Type": "application/json",
+      //     "x-api-key": API_KEY,
+      //     Accept: "text/plain",
+      //   },
+      //   body: JSON.stringify({ prayer: prompt }),
+      //   signal: controller.signal,
+      // });
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "text/plain",
+      },
+      body: JSON.stringify({ prayer: prompt }),
+      signal: controller.signal,
+    });
       const contentType = res.headers.get("content-type") || "";
 
       if (!res.ok) {

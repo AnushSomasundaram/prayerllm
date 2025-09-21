@@ -12,7 +12,7 @@ load_dotenv()
 # Import from SAME directory
 from llm_client_chatgpt import chat_once, chat_stream
 
-PRAYER_API_KEYS = {k.strip() for k in os.getenv("PRAYER_API_KEYS", "dev-secret-key").split(",") if k.strip()}
+PRAYER_API_KEYS = {k.strip() for k in os.getenv("PRAYER_API_KEYS", "").split(",") if k.strip()}
 MAX_CONCURRENT = int(os.getenv("MAX_CONCURRENT", "4"))
 ALLOW_ORIGINS = os.getenv("ALLOW_ORIGINS", "*")
 
