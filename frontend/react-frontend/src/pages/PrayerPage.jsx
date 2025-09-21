@@ -85,8 +85,8 @@ import { useRef, useState, useEffect } from "react";
 
 //when workign with fast api running on a docker contatiner on google cloud run
 
-const STREAM_URL = "/api/pray_stream";
-const TEXT_URL   = "/api/pray_text";
+const STREAM_URL = "react-frontend/api/pray_stream.js";
+const TEXT_URL   = "react-frontend/api/pray_text.js";
 
 export default function PrayerPage() {
   const [text, setText] = useState("");
@@ -184,14 +184,21 @@ export default function PrayerPage() {
   async function callPlain(url, prompt, signal) {
     const res = await fetch(url, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": API_KEY,
-        Accept: "text/plain",
-      },
-      body: JSON.stringify({ prayer: prompt }),
-      signal,
-    });
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "x-api-key": API_KEY,
+    //     Accept: "text/plain",
+    //   },
+    //   body: JSON.stringify({ prayer: prompt }),
+    //   signal,
+    // });
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "text/plain",
+    },
+    body: JSON.stringify({ prayer: prompt }),
+    signal: controller.signal,
+  });
     const raw = await res.text().catch(() => "");
     if (!res.ok) {
       try {
