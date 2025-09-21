@@ -85,7 +85,7 @@ import { useRef, useState, useEffect } from "react";
 
 //when workign with fast api running on a docker contatiner on google cloud run
 
-const STREAM_URL = "/api/pray";
+const STREAM_URL = "/api/pray_stream";
 const TEXT_URL   = "/api/pray_text";
 
 export default function PrayerPage() {
