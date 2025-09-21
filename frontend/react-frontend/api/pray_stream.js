@@ -1,5 +1,3 @@
-export const config = { runtime: 'nodejs' };
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -15,7 +13,9 @@ export default async function handler(req, res) {
 
     res.status(upstream.status);
     res.setHeader('Content-Type', upstream.headers.get('content-type') ?? 'text/plain');
-    // Node 18: Response.body is a readable stream
+
+    // stream bytes through
+    // @ts-ignore: on Node, Response.body is a readable stream
     upstream.body?.pipe(res);
   } catch (e) {
     res.status(502).json({ error: 'Upstream error', detail: e?.message || String(e) });

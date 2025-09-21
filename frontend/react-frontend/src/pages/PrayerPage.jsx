@@ -357,9 +357,8 @@
 
 import { useRef, useState, useEffect } from "react";
 
-/** Proxy routes on Vercel (no secrets in browser) */
 const STREAM_URL = "/api/pray";
-const TEXT_URL = "/api/pray_text";
+const TEXT_URL   = "/api/pray_text";
 
 export default function PrayerPage() {
   const [text, setText] = useState("");
@@ -367,8 +366,8 @@ export default function PrayerPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const abortRef = useRef<AbortController | null>(null);
-  const answerBoxRef = useRef<HTMLDivElement | null>(null);
+  const abortRef = useRef(null);
+  const answerBoxRef = useRef(null);
 
   // auto-scroll as new content streams in
   useEffect(() => {
@@ -394,7 +393,7 @@ export default function PrayerPage() {
 
     setLoading(true);
     try {
-      // Try streaming endpoint first
+      // try streaming first (expects text/plain chunks)
       const res = await fetch(STREAM_URL, {
         method: "POST",
         headers: {
@@ -417,14 +416,14 @@ export default function PrayerPage() {
         }
       }
 
-      // If not actually streaming, fall back to non-stream JSON/text endpoint
+      // If not streaming, fall back to plain text endpoint
       if (!res.body || !contentType.includes("text/plain")) {
         const full = await callPlain(TEXT_URL, prompt, controller.signal);
         setAnswer(full);
         return;
       }
 
-      // Stream chunks and append as they arrive
+      // stream chunks
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       while (true) {
@@ -449,15 +448,14 @@ export default function PrayerPage() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/json", // expect JSON from proxy
+        // proxy now returns text/plain; Accept either is fine
+        Accept: "text/plain",
       },
       body: JSON.stringify({ prayer: prompt }),
       signal,
     });
 
-    const contentType = res.headers.get("content-type") || "";
     const raw = await res.text().catch(() => "");
-
     if (!res.ok) {
       try {
         const j = JSON.parse(raw);
@@ -466,17 +464,7 @@ export default function PrayerPage() {
         throw new Error(raw || `HTTP ${res.status}`);
       }
     }
-
-    // If JSON with {text}, return that; otherwise return raw
-    if (contentType.includes("application/json")) {
-      try {
-        const j = JSON.parse(raw);
-        return typeof j?.text === "string" ? j.text : raw;
-      } catch {
-        // fall through
-      }
-    }
-    return raw;
+    return raw; // plain text body
   }
 
   function handleCancel() {
@@ -526,7 +514,7 @@ export default function PrayerPage() {
             disabled={loading}
           />
 
-          <div style={{ display: "flex", gap: 8 }}>
+        <div style={{ display: "flex", gap: 8 }}>
             <button
               type="submit"
               disabled={loading}
