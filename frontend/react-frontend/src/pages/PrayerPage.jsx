@@ -357,7 +357,7 @@
 
 import { useRef, useState, useEffect } from "react";
 
-const STREAM_URL = "/api/pray";
+const STREAM_URL = "/api/pray_stream";
 const TEXT_URL   = "/api/pray_text";
 
 export default function PrayerPage() {
